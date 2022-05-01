@@ -8,11 +8,16 @@ public class CarMovement : MonoBehaviour
     public float turnMagnitude = 0f;
     public float forwardMagnitude = 1f;
 
-    public float maxSpeed = 70f;
+    public float maxSpeed = 40;
     public float backwardsMaxSpeed = 20f;
-    public float acceleration = 5000f;
+    public float acceleration = 2000;
     public bool Controllable=false;
     public Vector3 defaultCOM = new Vector3(0f,-.1f,-0.4f);
+
+
+
+
+    private float racingPlaneMagnitude = 0f;
 
 
     // Start is called before the first frame update
@@ -28,10 +33,32 @@ public class CarMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Controllable)
+        racingPlaneMagnitude = new Vector2((transform.forward.x*rigidbody.velocity.x+transform.forward.z*rigidbody.velocity.z),
+                (transform.right.x*rigidbody.velocity.x+transform.right.z*rigidbody.velocity.z)).magnitude;
+
+        
+        if(Controllable && IsNotColliding==false)
         {
+            const float engineOnConstant = 1f;
+
+
             turnMagnitude = Input.GetAxisRaw("Horizontal");
             forwardMagnitude = Input.GetAxisRaw("Vertical");
+
+            //only plays when moving slowly and input given
+            if(forwardMagnitude != 0 && rigidbody.velocity.magnitude <= engineOnConstant)
+            {
+
+                FindObjectOfType<AudioManager>().Play("EngineStart");
+            }
+
+            if(racingPlaneMagnitude>engineOnConstant)
+            {
+
+                float engineRate = 0.8f  + racingPlaneMagnitude/maxSpeed;       
+                FindObjectOfType<AudioManager>().SetPitch("EngineGoing",engineRate);
+                FindObjectOfType<AudioManager>().Play("EngineGoing");
+            }
         }
 
         DriveCar(); 
@@ -83,6 +110,7 @@ public class CarMovement : MonoBehaviour
  
      void OnCollisionEnter(Collision col)
      {
+         //maybe add a fun little collision noise 
          collisionCount++;
      }
  
