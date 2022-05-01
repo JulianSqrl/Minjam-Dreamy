@@ -76,7 +76,19 @@ public class CarMovement : MonoBehaviour
             const float engineOnConstant = 1f;
 
 
-            turnMagnitude = Input.GetAxisRaw("Horizontal");
+            //this makes turning feel more weighty
+            float turnRateOfChange = 2f;
+            if(Input.GetAxisRaw("Horizontal") != 0 && turnMagnitude < 1f && turnMagnitude >-1f)
+            {
+                turnMagnitude += Input.GetAxisRaw("Horizontal")*Time.deltaTime*turnRateOfChange;
+            }
+            if(Input.GetAxisRaw("Horizontal") ==0)
+            {
+                turnMagnitude -= turnRateOfChange*Time.deltaTime*turnMagnitude;
+            }
+
+            
+
             forwardMagnitude = Input.GetAxisRaw("Vertical");
 
             //only plays when moving slowly and input given
@@ -135,7 +147,7 @@ public class CarMovement : MonoBehaviour
 
 
         rigidbody.AddForce(transform.forward*forwardMagnitude*Time.deltaTime*acceleration);
-        rigidbody.angularVelocity = new Vector3(0f,1f,0f) *turnMagnitude * 1.5f*(0.3f+(rigidbody.velocity.magnitude/maxSpeed));
+        rigidbody.angularVelocity = new Vector3(0f,1f,0f) *turnMagnitude * 3f*(0.3f+(rigidbody.velocity.magnitude/maxSpeed));
 
         rigidbody.angularVelocity += transform.right * Time.deltaTime *(50f+forwardMagnitude*100f)*Vector3AngleMagnitude(new Vector3(0f,1f,0f),(transform.forward+0.65f*transform.up));
         rigidbody.AddForce(-transform.up*Time.deltaTime*1000f*(forwardMagnitude*forwardMagnitude));
