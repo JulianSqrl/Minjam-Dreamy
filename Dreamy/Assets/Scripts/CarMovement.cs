@@ -17,7 +17,7 @@ public class CarMovement : MonoBehaviour
 
 
 
-    private float racingPlaneMagnitude = 0f;
+    public float racingPlaneMagnitude = 0f;
 
 
     // Start is called before the first frame update
@@ -66,10 +66,6 @@ public class CarMovement : MonoBehaviour
 
     public void DriveCar()
     {
-        if(IsNotColliding)
-        {
-            return;
-        }
 
 
         
@@ -77,6 +73,7 @@ public class CarMovement : MonoBehaviour
         //gravity works like normal when in the air
         Vector2 racingPlane = new Vector2((transform.forward.x*rigidbody.velocity.x+transform.forward.z*rigidbody.velocity.z),
         (transform.right.x*rigidbody.velocity.x+transform.right.z*rigidbody.velocity.z));
+        
         
         if (racingPlane.magnitude>maxSpeed)
         {
@@ -93,8 +90,37 @@ public class CarMovement : MonoBehaviour
         }
 
 
+        //if gravity is too high then collision gets fucked
+        if(rigidbody.velocity.y >20f)
+        {
+            rigidbody.useGravity = false;
+        }
+        else
+        {
+            rigidbody.useGravity = true;
+        }
+
+        if(IsNotColliding)
+        {
+            return;
+        }
+
+
+
+
+
         rigidbody.AddForce(transform.forward*forwardMagnitude*Time.deltaTime*acceleration);
         rigidbody.angularVelocity = new Vector3(0f,1f,0f) *turnMagnitude * 1.5f*(0.3f+(rigidbody.velocity.magnitude/maxSpeed));
+
+        rigidbody.angularVelocity += transform.right * Time.deltaTime *1000f*Vector3AngleMagnitude(new Vector3(0f,1f,0f),transform.forward);
+    }
+
+
+    private float Vector3AngleMagnitude(Vector3 V1,Vector3 V2)
+    {
+
+
+        return V1.x*V2.x +V1.y*V2.y +V1.z*V2.z/(V1.magnitude*V2.magnitude) ;
     }
  
     
