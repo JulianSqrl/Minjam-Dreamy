@@ -16,6 +16,23 @@ public class CarMovement : MonoBehaviour
 
 
 
+    //this is so that the car knows when to drive
+     private int collisionCount = 0;
+ 
+     public bool IsNotColliding
+     {
+         get { return collisionCount == 0; }
+     }
+
+    //gives some leeway to collision to make it feel better
+    const float collidingTimer = 0.4f;
+    public float collidingTime = collidingTimer;
+    public bool collidingTimeOver = false;
+
+    
+
+
+
 
     public float racingPlaneMagnitude = 0f;
 
@@ -33,11 +50,28 @@ public class CarMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //updates collidng time over
+        if(IsNotColliding)
+        {
+            collidingTime -= Time.deltaTime;
+        }
+        else
+        {
+            collidingTime = collidingTimer;
+            collidingTimeOver = false;
+        }
+
+        if(collidingTime<=0f)
+        {
+            collidingTimeOver = true;
+        }
+
+
         racingPlaneMagnitude = new Vector2((transform.forward.x*rigidbody.velocity.x+transform.forward.z*rigidbody.velocity.z),
                 (transform.right.x*rigidbody.velocity.x+transform.right.z*rigidbody.velocity.z)).magnitude;
 
         
-        if(Controllable && IsNotColliding==false)
+        if(Controllable && collidingTimeOver==false)
         {
             const float engineOnConstant = 1f;
 
@@ -90,17 +124,8 @@ public class CarMovement : MonoBehaviour
         }
 
 
-        //if gravity is too high then collision gets fucked
-        if(rigidbody.velocity.y >20f)
-        {
-            rigidbody.useGravity = false;
-        }
-        else
-        {
-            rigidbody.useGravity = true;
-        }
 
-        if(IsNotColliding)
+        if(collidingTimeOver)
         {
             return;
         }
@@ -112,7 +137,8 @@ public class CarMovement : MonoBehaviour
         rigidbody.AddForce(transform.forward*forwardMagnitude*Time.deltaTime*acceleration);
         rigidbody.angularVelocity = new Vector3(0f,1f,0f) *turnMagnitude * 1.5f*(0.3f+(rigidbody.velocity.magnitude/maxSpeed));
 
-        rigidbody.angularVelocity += transform.right * Time.deltaTime *1000f*Vector3AngleMagnitude(new Vector3(0f,1f,0f),transform.forward);
+        rigidbody.angularVelocity += transform.right * Time.deltaTime *(50f+forwardMagnitude*100f)*Vector3AngleMagnitude(new Vector3(0f,1f,0f),(transform.forward+0.65f*transform.up));
+        rigidbody.AddForce(-transform.up*Time.deltaTime*1000f*(forwardMagnitude*forwardMagnitude));
     }
 
 
@@ -125,14 +151,6 @@ public class CarMovement : MonoBehaviour
  
     
 
-
-    //this is so that the car knows when to drive
-     private int collisionCount = 0;
- 
-     public bool IsNotColliding
-     {
-         get { return collisionCount == 0; }
-     }
  
      void OnCollisionEnter(Collision col)
      {
