@@ -18,7 +18,7 @@ public class StarGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(starRef.getStar() > 300)
+        if(starRef.getStar() > 100)
         {
             Destroy(this);
             

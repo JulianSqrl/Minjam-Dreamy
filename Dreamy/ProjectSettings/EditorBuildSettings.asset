@@ -17,7 +17,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/CarTesting.unity
     guid: f38f3710b85afbb478b337c14e9c1118
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Bedroom.unity
     guid: 144e4966d98b0db4b8a01d5617ca8ec2
+  - enabled: 1
+    path: Assets/Scenes/FallingPlayer.unity
+    guid: b8907813a3d8bd34ea95b3d581809bc1
+  - enabled: 1
+    path: Assets/Scenes/Hospital.unity
+    guid: 18d8c0d66e64f8941816483f1368d73b
   m_configObjects: {}
