@@ -27,7 +27,7 @@ public class HosppitalStaging : MonoBehaviour
 
         if(Count >= 24f)
         {
-            SceneManager.LoadScene(4);
+            Application.Quit();
 
         }
         
