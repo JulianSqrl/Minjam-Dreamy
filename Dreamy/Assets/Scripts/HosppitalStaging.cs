@@ -25,7 +25,7 @@ public class HosppitalStaging : MonoBehaviour
 
         }
 
-        if(Count >= 24f)
+        if(Count >= 23f)
         {
             Application.Quit();
 

@@ -149,8 +149,8 @@ public class CarMovement : MonoBehaviour
         rigidbody.AddForce(transform.forward*forwardMagnitude*Time.deltaTime*acceleration);
         rigidbody.angularVelocity = new Vector3(0f,1f,0f) *turnMagnitude * 3f*(0.3f+(rigidbody.velocity.magnitude/maxSpeed));
 
-        rigidbody.angularVelocity += transform.right * Time.deltaTime *(50f+forwardMagnitude*100f)*Vector3AngleMagnitude(new Vector3(0f,1f,0f),(transform.forward+0.65f*transform.up));
-        rigidbody.AddForce(-transform.up*Time.deltaTime*1000f*(forwardMagnitude*forwardMagnitude));
+        rigidbody.angularVelocity += transform.right * Time.deltaTime *(5f+forwardMagnitude*10f)*Vector3AngleMagnitude(new Vector3(0f,1f,0f),(transform.forward+0.65f*transform.up));
+        rigidbody.AddForce(-transform.up*Time.deltaTime*100f*(forwardMagnitude*forwardMagnitude));
     }
 
 
